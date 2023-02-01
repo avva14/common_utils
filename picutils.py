@@ -1,3 +1,5 @@
+import numpy as np
+
 def get_properbb(img):
     '''
     Returns box that contains not-zero values
