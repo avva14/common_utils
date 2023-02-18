@@ -65,12 +65,12 @@ def moirebackground(rndarr, imgsize):
     Returns numpy array shape (imgsize,imgsize) with moire pattern
     '''
     ns = 2*imgsize
-    grey = 128
-    blank = 128 + grey*np.ones((ns,ns), np.uint8)
+
+    blank = np.zeros((ns,ns), np.uint8)
     for i in range(ns):
         if i % 3 != 0:
             continue
-        blank[i] = grey*np.ones(ns, np.uint8)
+        blank[i] = 255*np.ones(ns, np.uint8)
     img = Image.fromarray(blank)
 
     rndxxx = rndarr*np.array(4*[1,-1])
@@ -91,11 +91,4 @@ def moirebackground(rndarr, imgsize):
     ims = ims.crop((imgsize//2, imgsize//2, imgsize//2+imgsize, imgsize//2+imgsize))
     ims = ims.resize((120,120))
     ims = ims.resize((imgsize,imgsize))
-    
-    res = np.asarray(ims) / 255
-    
-    maxvalshift = 1 - res.max()
-    res += maxvalshift
-
-    return np.expand_dims((res*255), axis=-1)
-    
+    return np.expand_dims(ims, axis=-1) / 255
