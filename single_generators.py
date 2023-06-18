@@ -20,13 +20,13 @@ class SingleTestGenerator:
     def __iter__(self):
         return self
 
-    def __next__(self):        
+    def __next__(self):
         
         randoms_here = self.randgen.rand(12)
         blanks = 1 - self.noise * randoms_here[8]*moirebackground(randoms_here[0:8], self.imgsize)
         
         labes = []
-        boxes = []        
+        boxes = []
         
         a = next(self.iterator)
         
@@ -78,7 +78,7 @@ class SingleTrainGenerator:
         self.moiredat = None
         return self
 
-    def __next__(self):        
+    def __next__(self):
         
         if self.count == self.numread:
             self.numfile = (self.numfile+1) % len(self.moirefiles)
@@ -105,12 +105,12 @@ class SingleTrainGenerator:
             datapiece = self.moiredat[self.count,ys:ys+self.imgsize,xs+self.imgsize:xs:-1]
         else:
             datapiece = self.moiredat[self.count,ys+self.imgsize:ys:-1,xs+self.imgsize:xs:-1]
-        blanks = 1 - self.noise * randoms_here[3]*datapiece/255        
+        blanks = 1 - self.noise * randoms_here[3]*datapiece/255
         
-        toss = int(randoms_here[9] * (self.numclasses + 1))        
+        toss = int(randoms_here[9] * (self.numclasses + 1))
         labes = np.array([self.numclasses], dtype=np.int32)
-        boxes = []
-        
+        boxes = np.zeros((1,4), dtype=np.int32)
+
         if (toss < self.numclasses):
 
             a = next(self.iterator)
@@ -126,11 +126,11 @@ class SingleTrainGenerator:
             box = np.array([xmin, ymin, 0, 0], dtype=np.int32) + boundbox
 
             labes[0] = a['label']
-            boxes.append(box)
+            boxes[0] = box
             
             for j in range(h):
                 y = (ymin + j) % self.imgsize
                 blanks[y,xmin:xmin+w,0] *= 1 - image[j,:] / 255
-                
-        self.count += 1        
-        return 1 - blanks, (labes.astype(np.float32), np.array(boxes, dtype=np.float32))
+
+        self.count += 1
+        return 1 - blanks, (labes.astype(np.float32), boxes.astype(np.float32))
