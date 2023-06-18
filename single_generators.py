@@ -5,8 +5,8 @@ import cv2 as cv
 import zipfile
 from zipfile import ZipFile
 
-from noisyutils import moirebackground
-from picutils import get_properbb
+from common_utils.noisyutils import moirebackground
+from common_utils.picutils import get_properbb
 
 class SingleTestGenerator:
 
