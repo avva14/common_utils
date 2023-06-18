@@ -48,7 +48,7 @@ class SingleTestGenerator:
             y = (ymin + j) % self.imgsize
             blanks[y,xmin:xmin+w,0] *= 1 - image[j,:] / 255
 
-        return 1 - blanks, (np.array(labes, dtype=np.float32), np.array(boxes))
+        return 1 - blanks, (np.array(labes, dtype=np.float32), np.array(boxes, dtype=np.float32))
 
 class SingleTrainGenerator:
 
@@ -133,4 +133,4 @@ class SingleTrainGenerator:
                 blanks[y,xmin:xmin+w,0] *= 1 - image[j,:] / 255
                 
         self.count += 1        
-        return 1 - blanks, (labes.astype(np.float32), np.array(boxes))
+        return 1 - blanks, (labes.astype(np.float32), np.array(boxes, dtype=np.float32))
