@@ -52,11 +52,10 @@ class SingleTestGenerator:
 
 class SingleTrainGenerator:
 
-    def __init__(self, iterator, random_gen, noisefiles, num_classes, noise_level, size_in, size_out):
+    def __init__(self, iterator, random_gen, noisefiles, noise_level, size_in, size_out):
         self.iterator = iterator
         self.imgsize = size_out
         self.mnistsize = size_in
-        self.numclasses = num_classes
         self.noise = noise_level
         self.randgen = random_gen
         self.moirefiles = noisefiles
@@ -89,7 +88,7 @@ class SingleTrainGenerator:
                 with thezip.open(contents[0]) as thefile:
                     self.moiredat = np.frombuffer(thefile.read(), dtype=np.uint8).reshape((-1,500,500,1))  
             self.numread = self.moiredat.shape[0]
-            self.randoms_pool = np.random.rand(self.numread,13)
+            self.randoms_pool = np.random.rand(self.numread,7)
             self.count = 0
         
         randoms_here = self.randoms_pool[self.count]
@@ -114,13 +113,13 @@ class SingleTrainGenerator:
         
         image = a['image'].astype(np.float32)[::-1]
         labl = a['label']
-        ratio = 1 + 3 * randoms_here[10]
+        ratio = 1 + 3 * randoms_here[4]
         w, h = int(self.mnistsize*ratio), int(self.mnistsize*ratio)
         image = cv.resize(image, (w, h))
         boundbox = get_properbb(image)
 
-        xmin = int((self.imgsize-w)*randoms_here[11])
-        ymin = int(self.imgsize*randoms_here[12])
+        xmin = int((self.imgsize-w)*randoms_here[5])
+        ymin = int(self.imgsize*randoms_here[6])
 
         box = np.array([xmin, ymin, 0, 0], dtype=np.int32) + boundbox
         
@@ -132,3 +131,4 @@ class SingleTrainGenerator:
 
         self.count += 1
         return 1 - blanks, (np.array(labes, dtype=np.float32), np.array(boxes, dtype=np.float32))
+
