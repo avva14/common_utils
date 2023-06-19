@@ -107,30 +107,28 @@ class SingleTrainGenerator:
             datapiece = self.moiredat[self.count,ys+self.imgsize:ys:-1,xs+self.imgsize:xs:-1]
         blanks = 1 - self.noise * randoms_here[3]*datapiece/255
         
-        toss = int(randoms_here[9] * (self.numclasses + 1))
-        labes = np.array([self.numclasses], dtype=np.int32)
-        boxes = np.zeros((1,4), dtype=np.int32)
+        labes = []
+        boxes = []
+        
+        a = next(self.iterator)
+        
+        image = a['image'].astype(np.float32)[::-1]
+        labl = a['label']
+        ratio = 1 + 3 * randoms_here[10]
+        w, h = int(self.mnistsize*ratio), int(self.mnistsize*ratio)
+        image = cv.resize(image, (w, h))
+        boundbox = get_properbb(image)
 
-        if (toss < self.numclasses):
+        xmin = int((self.imgsize-w)*randoms_here[11])
+        ymin = int(self.imgsize*randoms_here[12])
 
-            a = next(self.iterator)
-            image = a['image'].astype(np.float32)[::-1]
-            ratio = 1 + 3 * randoms_here[10]
-            w, h = int(self.mnistsize*ratio), int(self.mnistsize*ratio)
-            image = cv.resize(image, (w, h))
-            boundbox = get_properbb(image)
-
-            xmin = int((self.imgsize-w)*randoms_here[11])
-            ymin = int(self.imgsize*randoms_here[12])
-            
-            box = np.array([xmin, ymin, 0, 0], dtype=np.int32) + boundbox
-
-            labes[0] = a['label']
-            boxes[0] = box
-            
-            for j in range(h):
-                y = (ymin + j) % self.imgsize
-                blanks[y,xmin:xmin+w,0] *= 1 - image[j,:] / 255
+        box = np.array([xmin, ymin, 0, 0], dtype=np.int32) + boundbox
+        
+        labes.append(labl)
+        boxes.append(box)
+        for j in range(h):
+            y = (ymin + j) % self.imgsize
+            blanks[y,xmin:xmin+w,0] *= 1 - image[j,:] / 255
 
         self.count += 1
-        return 1 - blanks, (labes.astype(np.float32), boxes.astype(np.float32))
+        return 1 - blanks, (np.array(labes, dtype=np.float32), np.array(boxes, dtype=np.float32))
