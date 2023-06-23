@@ -6,7 +6,7 @@ import zipfile
 from zipfile import ZipFile
 
 from common_utils.noisyutils import moirebackground
-from common_utils.picutils import get_properbb
+from common_utils.picutils import get_properbb, compute_iou
 
 class UnetMaskTestGenerator:
 
