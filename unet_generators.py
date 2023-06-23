@@ -176,5 +176,6 @@ class UnetMaskTrainGenerator:
             for j in range(box[3]):
                 y = (box[1] + j) % self.imgsize
                 masks[y,box[0]:box[0]+box[2],0] = labl
-
+                
+        self.count += 1
         return 1 - blanks, masks
