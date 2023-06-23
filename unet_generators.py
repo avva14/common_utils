@@ -94,7 +94,7 @@ class UnetMaskTrainGenerator:
 
     def __iter__(self):
         self.shindex = np.arange(len(self.moirefiles))
-        np.random.shuffle(shindex)
+        np.random.shuffle(self.shindex)
         self.count = -1
         self.numread = -1
         self.numfile = -1
