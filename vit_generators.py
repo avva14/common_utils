@@ -30,7 +30,7 @@ class VitSolidTestGenerator:
         randoms_here = self.randgen.rand(10+self.maxnum)
         blanks = 1 - self.noise * randoms_here[8]*moirebackground(randoms_here[0:8], self.imgsize)
         npics = 1 + int(randoms_here[9]*self.maxnum)
-        oneh = np.zeros((self.ndiv2, num_classes+1))
+        oneh = np.zeros((self.ndiv2, self.num_class+1))
         
         boxes = []
         soxes = []
@@ -155,7 +155,7 @@ class VitSolidTrainGenerator:
         blanks = 1 - self.noise * randoms_here[3]*datapiece/255
         masks = np.zeros(shape=[self.imgsize, self.imgsize, 1], dtype=np.float32)
         npics = 1 + int(randoms_here[4]*self.maxnum)
-        oneh = np.zeros((self.ndiv2, num_classes+1))
+        oneh = np.zeros((self.ndiv2, self.num_class+1))
         
         boxes = []
         soxes = []
