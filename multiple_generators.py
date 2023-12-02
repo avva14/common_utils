@@ -25,11 +25,15 @@ class MultipleTestGenerator:
         
         randoms_here = self.randgen.rand(10+self.maxnum)
         blanks = 1 - self.noise * randoms_here[8]*moirebackground(randoms_here[0:8], self.imgsize)
-        npics = 1 + int(randoms_here[9]*self.maxnum)
         
         labes = []
         boxes = []        
+        
+        if self.maxnum == 0:
+            return 1 - blanks, (np.array(labes, dtype=np.float32), np.array(boxes))
+
         ip = 0
+        npics = 1 + int(randoms_here[9]*self.maxnum)
         while ip < npics:
             a = next(self.iterator)
         
@@ -128,12 +132,16 @@ class MultipleTrainGenerator:
             datapiece = self.moiredat[self.count,ys+self.imgsize:ys:-1,xs+self.imgsize:xs:-1]
         blanks = 1 - self.noise * randoms_here[3]*datapiece/255
         
-        npics = 1 + int(randoms_here[9]*self.maxnum)
+        self.count += 1
         
         boxes = []
         labes = []
         
+        if self.maxnum == 0:
+            return 1 - blanks, (np.array(labes, dtype=np.float32), np.array(boxes))
+        
         ip = 0
+        npics = 1 + int(randoms_here[9]*self.maxnum)
         
         while ip < npics:
             a = next(self.iterator)
