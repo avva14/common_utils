@@ -76,11 +76,10 @@ class MultipleTestGenerator:
 
 class MultipleTrainGenerator:
 
-    def __init__(self, iterator, random_gen, noisefiles, max_num, num_classes, noise_level, size_in, size_out):
+    def __init__(self, iterator, random_gen, noisefiles, max_num, noise_level, size_in, size_out):
         self.iterator = iterator
         self.imgsize = size_out
         self.mnistsize = size_in
-        self.numclasses = num_classes
         self.noise = noise_level
         self.randgen = random_gen
         self.moirefiles = noisefiles
