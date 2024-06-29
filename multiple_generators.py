@@ -113,7 +113,7 @@ class MultipleTrainGenerator:
                 with thezip.open(contents[0]) as thefile:
                     self.moiredat = np.frombuffer(thefile.read(), dtype=np.uint8).reshape((-1,500,500,1))  
             self.numread = self.moiredat.shape[0]
-            self.randoms_pool = np.random.rand(self.numread,13)
+            self.randoms_pool = np.random.rand(self.numread,10+self.maxnum)
             self.count = 0
         
         randoms_here = self.randoms_pool[self.count]
