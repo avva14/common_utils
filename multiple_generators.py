@@ -32,6 +32,7 @@ class MultipleTestGenerator:
         if self.maxnum == 0:
             return 1 - blanks, (np.array(labes, dtype=np.float32), np.array(boxes))
 
+        maxratio = self.imgsize / self.mnistsize
         ip = 0
         npics = 1 + int(randoms_here[9]*self.maxnum)
         while ip < npics:
@@ -39,7 +40,8 @@ class MultipleTestGenerator:
         
             image = a['image'].astype(np.float32)[::-1]
             labl = a['label']
-            ratio = 1 + 2 * randoms_here[ip+10]
+
+            ratio = min(1 + 2 * randoms_here[ip+10], maxratio)
             w, h = int(self.mnistsize*ratio), int(self.mnistsize*ratio)
             image = cv.resize(image, (w, h))
             boundbox = get_properbb(image)
@@ -141,13 +143,14 @@ class MultipleTrainGenerator:
         
         ip = 0
         npics = 1 + int(randoms_here[9]*self.maxnum)
+        maxratio = self.imgsize / self.mnistsize
         
         while ip < npics:
             a = next(self.iterator)
         
             image = a['image'].astype(np.float32)[::-1]
             labl = a['label']
-            ratio = 1 + 2 * randoms_here[ip+10]
+            ratio = min(1 + 2 * randoms_here[ip+10], maxratio)
             w, h = int(self.mnistsize*ratio), int(self.mnistsize*ratio)
             image = cv.resize(image, (w, h))
             boundbox = get_properbb(image)
