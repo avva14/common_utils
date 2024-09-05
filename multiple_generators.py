@@ -143,7 +143,7 @@ class MultipleTrainGenerator:
         
         ip = 0
         npics = 1 + int(randoms_here[9]*self.maxnum)
-        maxratio = self.imgsize / self.mnistsize
+        maxratio = max(self.imgsize / self.mnistsize / npics, 1)
         
         while ip < npics:
             a = next(self.iterator)
@@ -184,3 +184,4 @@ class MultipleTrainGenerator:
                 blanks[y,xmin:xmin+w,0] *= 1 - image[j,:] / 255
 
         return 1 - blanks, (np.array(labes, dtype=np.float32), np.array(boxes))
+
